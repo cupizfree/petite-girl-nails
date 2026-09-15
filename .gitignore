@@ -1,0 +1,27 @@
+# Rust / Cargo
+backend/target/
+target/
+**/*.rs.bk
+*.pdb
+
+# Node / SvelteKit
+**/node_modules/
+**/.svelte-kit/
+frontend/build/
+.output/
+.vercel/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
+
+# Temp & Artifacts
+scratch/

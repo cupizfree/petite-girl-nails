@@ -1,0 +1,238 @@
+{
+  "bookings": [
+    {
+      "id": 1,
+      "booking_code": "PGN-FEB927",
+      "name": "Bestie Clara",
+      "whatsapp": "081234567890",
+      "services": [
+        "Nail art di kuku asli",
+        "Tambah extension"
+      ],
+      "design_inspo": "Oke aku kirim di WA",
+      "appointment_date": "2026-09-17",
+      "appointment_time": "13:00",
+      "notes": "Kuku bentuk almond manis",
+      "status": "CANCELLED",
+      "created_at": "2026-09-15T09:34:33.510156+07:00"
+    },
+    {
+      "id": 2,
+      "booking_code": "PGN-7E4DCB",
+      "name": "Legawati",
+      "whatsapp": "082323113553",
+      "services": [
+        "Remove nail gel"
+      ],
+      "design_inspo": "Oke aku kirim di WA",
+      "appointment_date": "2026-09-24",
+      "appointment_time": "16:00",
+      "notes": "Asek",
+      "status": "COMPLETED",
+      "created_at": "2026-09-15T09:49:33.369681900+07:00"
+    },
+    {
+      "id": 3,
+      "booking_code": "PGN-7D0C88",
+      "name": "Bestie Sarah",
+      "whatsapp": "085179968311",
+      "services": [
+        "Nail art di kuku asli"
+      ],
+      "design_inspo": "Cat eye lavender",
+      "appointment_date": "2026-09-20",
+      "appointment_time": "16:00",
+      "notes": "Testing integrasi DB",
+      "status": "COMPLETED",
+      "created_at": "2026-09-15T09:51:19.153273100+07:00"
+    },
+    {
+      "id": 4,
+      "booking_code": "PGN-9DEEC2",
+      "name": "woy",
+      "whatsapp": "546846415",
+      "services": [
+        "Tambah extension",
+        "Nail art di kuku asli",
+        "Remove ext"
+      ],
+      "design_inspo": "Bergidik",
+      "appointment_date": "2026-09-15",
+      "appointment_time": "21:00",
+      "notes": "Kuku panjang",
+      "status": "PENDING",
+      "created_at": "2026-09-15T10:25:04.499127700+07:00"
+    }
+  ],
+  "slot_overrides": [],
+  "pon_orders": [
+    {
+      "id": 1,
+      "order_id": "PON-001",
+      "customer_name": "Bestie Sasa",
+      "deadline": "10 September 2026",
+      "status": "PROGRESS",
+      "notes": "Almond shape, pastel floral",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 2,
+      "order_id": "PON-002",
+      "customer_name": "Bestie Bella",
+      "deadline": "20 September 2026",
+      "status": "ANTRI",
+      "notes": "Short coffin, chrome French",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 3,
+      "order_id": "PON-003",
+      "customer_name": "Bestie Cindy",
+      "deadline": "15 September 2026",
+      "status": "PROGRESS",
+      "notes": "Custom 3D charms ribbon",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 4,
+      "order_id": "PON-004",
+      "customer_name": "Bestie Dinda",
+      "deadline": "15 September 2026",
+      "status": "ANTRI",
+      "notes": "Square oval, jelly blush pink",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 5,
+      "order_id": "PON-005",
+      "customer_name": "Bestie Eka",
+      "deadline": "18 September 2026",
+      "status": "ANTRI",
+      "notes": "Cat eye magnetic lavender",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 6,
+      "order_id": "PON-006",
+      "customer_name": "Bestie Fani",
+      "deadline": "16 September 2026",
+      "status": "ANTRI",
+      "notes": "Cozy autumn earth tone",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 7,
+      "order_id": "PON-007",
+      "customer_name": "Bestie Gita",
+      "deadline": "16 September 2026",
+      "status": "ANTRI",
+      "notes": "Minimalist white pearls",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 8,
+      "order_id": "PON-008",
+      "customer_name": "Bestie Hani",
+      "deadline": "09 September 2026",
+      "status": "SENT",
+      "notes": "Resi JNE: JNE88291039",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 9,
+      "order_id": "PON-009",
+      "customer_name": "Bestie Intan",
+      "deadline": "09 September 2026",
+      "status": "SENT",
+      "notes": "Resi J&T: JNT99120482",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 10,
+      "order_id": "PON-010",
+      "customer_name": "Bestie Jessica",
+      "deadline": "10 September 2026",
+      "status": "SENT",
+      "notes": "Ambil di studio Sewon",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 11,
+      "order_id": "PON-011",
+      "customer_name": "Bestie Karina",
+      "deadline": "11 September 2026",
+      "status": "SENT",
+      "notes": "Resi SiCepat: 0041289912",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 12,
+      "order_id": "PON-012",
+      "customer_name": "Bestie Laura",
+      "deadline": "15 September 2026",
+      "status": "READY_TO_PICK_UP",
+      "notes": "Bisa diambil jam 10.00-19.00",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 13,
+      "order_id": "PON-013",
+      "customer_name": "Bestie Maya",
+      "deadline": "11 September 2026",
+      "status": "SENT",
+      "notes": "Resi J&T: JNT10293812",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    },
+    {
+      "id": 14,
+      "order_id": "PON-014",
+      "customer_name": "Bestie Nadya",
+      "deadline": "12 September 2026",
+      "status": "SENT",
+      "notes": "Resi JNE: JNE77381902",
+      "created_at": "2026-09-15T09:34:10.040402400+07:00"
+    }
+  ],
+  "services": [
+    {
+      "id": 1,
+      "name": "Nail art di kuku asli",
+      "category": "Nail Art",
+      "estimated_duration_min": 90,
+      "price": 75000,
+      "description": "Manicure lengkap, buffing, kutek gel base & motif nail art manis pada kuku asli."
+    },
+    {
+      "id": 2,
+      "name": "Tambah extension",
+      "category": "Extension",
+      "estimated_duration_min": 60,
+      "price": 50000,
+      "description": "Tambahan perpanjangan kuku (soft gel tip / polygel) yang kuat dan natural."
+    },
+    {
+      "id": 3,
+      "name": "Remove ext",
+      "category": "Removal",
+      "estimated_duration_min": 45,
+      "price": 30000,
+      "description": "Pelepasan extension kuku lama dengan aman tanpa merusak kuku asli."
+    },
+    {
+      "id": 4,
+      "name": "Remove nail gel",
+      "category": "Removal",
+      "estimated_duration_min": 30,
+      "price": 20000,
+      "description": "Pembersihan dan pelepasan kutek gel lama menggunakan soaking lembut."
+    },
+    {
+      "id": 5,
+      "name": "Pasang press on nails",
+      "category": "Press On",
+      "estimated_duration_min": 40,
+      "price": 25000,
+      "description": "Pemasangan kuku palsu (PON) custom dengan lem khusus yang tahan lama dan rapi."
+    }
+  ]
+}
