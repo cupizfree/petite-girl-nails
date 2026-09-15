@@ -394,5 +394,21 @@ export const api = {
     } catch (err) {
       return { success: false, error: err.message };
     }
+  },
+
+  // 7. Admin Server Authentication
+  loginAdmin: async (username, password) => {
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.error('loginAdmin error:', err);
+      return { success: false, error: 'Gagal menghubungi server verifikasi' };
+    }
   }
 };

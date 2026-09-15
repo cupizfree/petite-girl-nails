@@ -339,32 +339,33 @@
   let authError = $state('');
   let authLoading = $state(false);
 
-  function handleLogin(e) {
+  async function handleLogin(e) {
     if (e && e.preventDefault) e.preventDefault();
     authError = '';
     authLoading = true;
     
     // Normalize input
-    const cleanUser = (authUsername || '').trim().toLowerCase();
+    const cleanUser = (authUsername || '').trim();
     const cleanPass = (authPassword || '').trim();
 
-    // User requested: username 'admin', password 'salsabila2026'
-    // Also accept ':salsabila2026' in case the user typed the colon
-    const isValidUser = cleanUser === 'admin';
-    const isValidPass = cleanPass === 'salsabila2026' || cleanPass === ':salsabila2026';
-
-    if (isValidUser && isValidPass) {
-      isAuthenticated = true;
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('pgn_admin_auth', 'true');
-        sessionStorage.setItem('pgn_admin_auth', 'true');
+    try {
+      const res = await api.loginAdmin(cleanUser, cleanPass);
+      if (res && res.success) {
+        isAuthenticated = true;
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('pgn_admin_auth', res.token || 'true');
+          sessionStorage.setItem('pgn_admin_auth', res.token || 'true');
+        }
+        authError = '';
+        loadData();
+      } else {
+        authError = res?.error || 'Username atau password tidak sesuai. Akses ditolak.';
       }
-      authError = '';
-      loadData();
-    } else {
-      authError = 'Username atau password tidak sesuai. Akses ditolak.';
+    } catch (err) {
+      authError = 'Gagal menghubungi server autentikasi.';
+    } finally {
+      authLoading = false;
     }
-    authLoading = false;
   }
 
   function handleLogout() {
