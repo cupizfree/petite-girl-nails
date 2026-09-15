@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS public.bookings (
     appointment_time TEXT NOT NULL,
     notes TEXT,
     status TEXT NOT NULL DEFAULT 'PENDING',
+    calendar_event_id TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
 );
 
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS public.pon_orders (
     deadline TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'ANTRI',
     notes TEXT,
+    calendar_event_id TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
 );
 

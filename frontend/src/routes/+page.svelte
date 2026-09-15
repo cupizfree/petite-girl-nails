@@ -68,8 +68,78 @@
     }
   });
 
-  function formatPrice(val) {
-    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(val);
+  let activeFilter = $state('ALL'); // 'ALL', 'NAIL_ART', 'PON'
+  let selectedImage = $state(null);
+
+  const showcaseItems = [
+    {
+      id: 1,
+      title: "Korean Soft Jelly & 3D Art",
+      category: "NAIL_ART",
+      categoryLabel: "Studio Nail Art",
+      src: "/nailsart1.jpg",
+      badge: "Studio Favorite ✨",
+      desc: "Manicure kuku asli dengan aksen jelly blush manis & motif estetik Korea yang rapi."
+    },
+    {
+      id: 2,
+      title: "Pastel Chrome & French Tip",
+      category: "NAIL_ART",
+      categoryLabel: "Studio Nail Art",
+      src: "/nailsart2.jpg",
+      badge: "Trending 🔥",
+      desc: "Kombinasi French tip modern dengan pantulan chrome mengkilap yang elegan dan bersih."
+    },
+    {
+      id: 3,
+      title: "Cute Charms & Dimensional Ribbon",
+      category: "NAIL_ART",
+      categoryLabel: "Studio Nail Art",
+      src: "/nailsart3.jpg",
+      badge: "Custom Motif 💖",
+      desc: "Hiasan pita 3D, mutiara, dan detail nail art unik sesuai inspirasi kuku impianmu."
+    },
+    {
+      id: 4,
+      title: "Custom Press On — Almond Luxury",
+      category: "PON",
+      categoryLabel: "Press On Nails",
+      src: "/pressonnails1.jpg",
+      badge: "Bisa Dipakai Ulang 📦",
+      desc: "Kuku palsu custom presisi sesuai ukuran jarimu dengan lem gel kuat & tahan air."
+    },
+    {
+      id: 5,
+      title: "Aesthetic Coffin & Cat Eye PON",
+      category: "PON",
+      categoryLabel: "Press On Nails",
+      src: "/pressonnails2.jpg",
+      badge: "Best Quality 💅",
+      desc: "Efek magnetik cat eye berkilau mewah, siap pasang dalam 15 menit tanpa ribet."
+    },
+    {
+      id: 6,
+      title: "Everyday Chic Custom PON Set",
+      category: "PON",
+      categoryLabel: "Press On Nails",
+      src: "/pressonnails3.jpg",
+      badge: "Best Seller 🌟",
+      desc: "Pilihan bentuk short coffin/almond natural untuk pelengkap outfit kuliah atau pesta."
+    }
+  ];
+
+  let filteredShowcase = $derived(
+    activeFilter === 'ALL'
+      ? showcaseItems
+      : showcaseItems.filter(item => item.category === activeFilter)
+  );
+
+  function openLightbox(item) {
+    selectedImage = item;
+  }
+
+  function closeLightbox() {
+    selectedImage = null;
   }
 </script>
 
@@ -129,33 +199,135 @@
   </div>
 </section>
 
-<!-- Services Catalogue Section -->
-<section class="section-wrap">
+<!-- Showcase Gallery Section -->
+<section class="section-wrap" id="showcase">
   <div class="section-header">
-    <div class="eyebrow">DAFTAR MENU & LAYANAN</div>
-    <h2 class="section-title">Pilihan Treatment Kuku Cantik</h2>
-    <p class="section-sub">Bisa pilih lebih dari satu layanan saat reservasi sesuai kondisi kuku bestie.</p>
+    <div class="brand-badge-center">
+      <div class="brand-trio">
+        <i class="coral"></i><i class="yellow"></i><i class="blue"></i>
+      </div>
+      <span>KATALOG KARYA ESTETIS</span>
+    </div>
+    <div class="eyebrow">SHOWCASE & INSPIRASI KUKU</div>
+    <h2 class="section-title">Galeri Hasil Karya Petite Girl Nails</h2>
+    <p class="section-sub">Koleksi nail art studio & custom press on nails manis karya studio kami di Sewon, Bantul ✨</p>
+
+    <!-- Filter Buttons -->
+    <div class="filter-tabs">
+      <button 
+        type="button"
+        class="filter-btn" 
+        class:active={activeFilter === 'ALL'} 
+        onclick={() => activeFilter = 'ALL'}
+      >
+        Semua Karya ({showcaseItems.length})
+      </button>
+      <button 
+        type="button"
+        class="filter-btn" 
+        class:active={activeFilter === 'NAIL_ART'} 
+        onclick={() => activeFilter = 'NAIL_ART'}
+      >
+        💅 Nail Art Kuku Asli ({showcaseItems.filter(i => i.category === 'NAIL_ART').length})
+      </button>
+      <button 
+        type="button"
+        class="filter-btn" 
+        class:active={activeFilter === 'PON'} 
+        onclick={() => activeFilter = 'PON'}
+      >
+        📦 Press On Nails ({showcaseItems.filter(i => i.category === 'PON').length})
+      </button>
+    </div>
   </div>
 
-  <div class="services-grid">
-    {#each services as item}
-      <div class="service-card">
-        <div class="service-top">
-          <span class="service-cat">{item.category}</span>
-          <span class="service-dur">⏱️ {item.estimated_duration_min} mnt</span>
+  <!-- Showcase Grid -->
+  <div class="showcase-grid">
+    {#each filteredShowcase as item (item.id)}
+      <div class="showcase-card animate-fade-in">
+        <div class="showcase-img-wrap" onclick={() => openLightbox(item)} role="button" tabindex="0" onkeydown={(e) => e.key === 'Enter' && openLightbox(item)}>
+          <img src={item.src} alt={item.title} class="showcase-img" loading="lazy" />
+          <div class="showcase-overlay">
+            <span class="zoom-btn">🔍 Lihat Detail</span>
+          </div>
+          <span class="showcase-badge">{item.badge}</span>
         </div>
-        <h3 class="service-name">{item.name}</h3>
-        <p class="service-desc">{item.description}</p>
-        <div class="service-bottom">
-          <div class="service-price">{formatPrice(item.price)}</div>
-          <a href="/book?service={encodeURIComponent(item.name)}" class="btn-book-sm">
-            Pilih Ini &rarr;
-          </a>
+        <div class="showcase-content">
+          <div class="showcase-cat-row">
+            <span class="showcase-tag">{item.categoryLabel}</span>
+          </div>
+          <h3 class="showcase-item-title">{item.title}</h3>
+          <p class="showcase-item-desc">{item.desc}</p>
+          <div class="showcase-actions">
+            <a href="/book?inspo={encodeURIComponent(item.title)}" class="btn-book-showcase">
+              <span>Request Ini</span> &rarr;
+            </a>
+            <a 
+              href="https://wa.me/6285179968311?text={encodeURIComponent(`Halo Petite Girl Nails! 💕 Saya tertarik dengan motif kuku '${item.title}' di galeri web, mau tanya untuk request desain ini yaa ✨`)}" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="btn-wa-showcase" 
+              title="Konsultasi via WA"
+            >
+              💬 Tanya
+            </a>
+          </div>
         </div>
       </div>
     {/each}
   </div>
+
+  <!-- Booking CTA Bar under showcase -->
+  <div class="showcase-cta-banner">
+    <div class="cta-banner-text">
+      <h4>Punya inspirasi desain kuku sendiri?</h4>
+      <p>Bawa foto referensi dari Pinterest/Instagram, kami siap wujudkan kuku impianmu!</p>
+    </div>
+    <div class="cta-banner-btns">
+      <a href="/book" class="btn-primary">
+        <span>💅 Reservasi Janji Temu</span>
+      </a>
+      <a href="/availability" class="btn-outline">
+        <span>📅 Cek Slot Kosong</span>
+      </a>
+    </div>
+  </div>
 </section>
+
+<!-- Lightbox Modal -->
+{#if selectedImage}
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+  <div class="lightbox-overlay" onclick={closeLightbox} role="dialog" aria-modal="true" tabindex="-1">
+    <div class="lightbox-modal animate-fade-in" onclick={(e) => e.stopPropagation()} role="document">
+      <button type="button" class="lightbox-close" onclick={closeLightbox} aria-label="Tutup">✕</button>
+      <div class="lightbox-img-box">
+        <img src={selectedImage.src} alt={selectedImage.title} class="lightbox-img" />
+      </div>
+      <div class="lightbox-info">
+        <div class="lightbox-meta">
+          <span class="showcase-badge-inline">{selectedImage.badge}</span>
+          <span class="showcase-tag">{selectedImage.categoryLabel}</span>
+        </div>
+        <h3 class="lightbox-title">{selectedImage.title}</h3>
+        <p class="lightbox-desc">{selectedImage.desc}</p>
+        <div class="lightbox-btns">
+          <a href="/book?inspo={encodeURIComponent(selectedImage.title)}" class="btn-primary" onclick={closeLightbox}>
+            <span>💅 Booking dengan Desain Ini</span>
+          </a>
+          <a 
+            href="https://wa.me/6285179968311?text={encodeURIComponent(`Halo Petite Girl Nails! 💕 Mau request motif kuku '${selectedImage.title}' seperti di galeri web ini yaa ✨`)}" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="btn-secondary"
+          >
+            <span>💬 Chat WhatsApp</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{/if}
 
 <!-- Studio Rules & Information -->
 <section class="section-wrap">
@@ -440,85 +612,326 @@
     color: var(--text-muted);
   }
 
-  /* Services Grid */
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-    gap: 20px;
-  }
-  .service-card {
-    background: var(--card-warm);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-md);
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.22s ease;
-    box-shadow: var(--shadow-sm);
-  }
-  .service-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--purple-border);
-  }
-  .service-top {
-    display: flex;
+  /* Showcase Section */
+  .brand-badge-center {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 8px;
+    background: var(--card-warm);
+    border: 1px solid var(--purple-border);
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--purple);
+    letter-spacing: 0.08em;
     margin-bottom: 12px;
   }
-  .service-cat {
+
+  .filter-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .filter-btn:hover {
+    border-color: var(--purple-border);
+    color: var(--purple);
+  }
+  .filter-btn.active {
+    background: var(--purple);
+    border-color: var(--purple);
+    color: #fffdf9;
+    box-shadow: 0 4px 14px rgba(81, 72, 91, 0.25);
+  }
+
+  /* Showcase Grid */
+  .showcase-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+  .showcase-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
+  }
+  .showcase-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--coral-border);
+  }
+
+  .showcase-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3.2;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--purple-soft);
+  }
+  .showcase-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    display: block;
+  }
+  .showcase-card:hover .showcase-img {
+    transform: scale(1.06);
+  }
+  .showcase-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(65, 56, 73, 0.35);
+    backdrop-filter: blur(2px);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+  }
+  .showcase-img-wrap:hover .showcase-overlay {
+    opacity: 1;
+  }
+  .zoom-btn {
+    background: var(--card);
+    color: var(--purple);
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    font-size: 12.5px;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  }
+
+  .showcase-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: rgba(255, 253, 249, 0.94);
+    backdrop-filter: blur(4px);
+    color: var(--purple);
+    font-size: 11px;
+    font-weight: 750;
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--purple-border);
+    box-shadow: 0 2px 8px rgba(81, 72, 91, 0.12);
+  }
+
+  .showcase-content {
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+  }
+  .showcase-cat-row {
+    margin-bottom: 8px;
+  }
+  .showcase-tag {
     font-size: 11px;
     font-weight: 700;
     color: var(--purple);
     background: var(--purple-soft);
-    padding: 4px 10px;
+    padding: 3px 10px;
     border-radius: var(--radius-full);
+    display: inline-block;
   }
-  .service-dur {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 600;
-  }
-  .service-name {
+  .showcase-item-title {
     font-size: 18px;
-    font-weight: 750;
+    font-weight: 800;
     color: var(--purple);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
+    line-height: 1.35;
   }
-  .service-desc {
+  .showcase-item-desc {
     font-size: 13px;
     color: var(--text-muted);
     line-height: 1.55;
-    margin-bottom: 20px;
-    flex: 1;
+    margin-bottom: 18px;
   }
-  .service-bottom {
+  .showcase-actions {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 10px;
     padding-top: 14px;
     border-top: 1px dashed var(--line);
   }
-  .service-price {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--green);
-  }
-  .btn-book-sm {
-    font-size: 12.5px;
-    font-weight: 700;
-    color: var(--purple);
-    background: var(--card);
-    border: 1px solid var(--purple-border);
-    padding: 6px 14px;
-    border-radius: var(--radius-full);
-    transition: 0.15s;
-  }
-  .btn-book-sm:hover {
+  .btn-book-showcase {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     background: var(--purple);
     color: #fffdf9;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: var(--radius-full);
+    transition: all 0.2s ease;
+  }
+  .btn-book-showcase:hover {
+    background: var(--purple-hover);
+    transform: translateY(-1px);
+  }
+  .btn-wa-showcase {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-warm);
+    border: 1px solid var(--line-strong);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 650;
+    padding: 8px 12px;
+    border-radius: var(--radius-full);
+    transition: all 0.18s ease;
+  }
+  .btn-wa-showcase:hover {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-soft);
+  }
+
+  /* CTA Banner under showcase */
+  .showcase-cta-banner {
+    background: linear-gradient(135deg, var(--purple-soft), #fffdf9);
+    border: 1px solid var(--purple-border);
+    border-radius: var(--radius-lg);
+    padding: 26px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-sm);
+  }
+  .cta-banner-text h4 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--purple);
+    margin-bottom: 4px;
+  }
+  .cta-banner-text p {
+    font-size: 13.5px;
+    color: var(--text-muted);
+  }
+  .cta-banner-btns {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  /* Lightbox Modal */
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(65, 56, 73, 0.7);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .lightbox-modal {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    max-width: 640px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--purple-border);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: 0.15s;
+  }
+  .lightbox-close:hover {
+    background: #fff;
+    transform: scale(1.1);
+  }
+  .lightbox-img-box {
+    width: 100%;
+    max-height: 380px;
+    overflow: hidden;
+    background: #000;
+  }
+  .lightbox-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .lightbox-info {
+    padding: 24px;
+  }
+  .lightbox-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .showcase-badge-inline {
+    background: var(--yellow-soft);
+    border: 1px solid var(--yellow-border);
+    color: var(--purple);
+    font-size: 11px;
+    font-weight: 750;
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+  }
+  .lightbox-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+  .lightbox-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+  .lightbox-btns {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   /* Rules Card */

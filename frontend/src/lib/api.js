@@ -1,6 +1,26 @@
 import { supabase } from './supabase';
+import { env } from '$env/dynamic/public';
 
 const DEFAULT_SLOTS = ["10:00", "13:00", "16:00", "19:00", "21:00"];
+
+// Deteksi apakah menggunakan PostgreSQL lokal (berdasarkan environment variable)
+const isLocalPostgres = (typeof env !== 'undefined' && env.PUBLIC_USE_LOCAL_POSTGRES === 'true')
+  || (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_USE_LOCAL_POSTGRES === 'true');
+
+async function callLocalApi(action, payload = {}) {
+  try {
+    const res = await fetch('/api/local', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action, payload })
+    });
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(`callLocalApi [${action}] error:`, err);
+    return { success: false, error: err.message || 'Gagal menghubungi database lokal PostgreSQL' };
+  }
+}
 
 export const api = {
   // 1. Studio Information
@@ -21,6 +41,10 @@ export const api = {
 
   // 2. Services (Menu Layanan & Harga)
   getServices: async () => {
+    if (isLocalPostgres) {
+      return await callLocalApi('getServices');
+    }
+
     try {
       const { data, error } = await supabase
         .from('services')
@@ -36,6 +60,10 @@ export const api = {
   },
 
   createService: async (payload) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('createService', payload);
+    }
+
     try {
       const { data, error } = await supabase
         .from('services')
@@ -57,6 +85,10 @@ export const api = {
   },
 
   updateService: async (id, payload) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('updateService', { id, ...payload });
+    }
+
     try {
       const { data, error } = await supabase
         .from('services')
@@ -79,6 +111,10 @@ export const api = {
   },
 
   deleteService: async (id) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('deleteService', { id });
+    }
+
     try {
       const { error } = await supabase
         .from('services')
@@ -94,6 +130,10 @@ export const api = {
 
   // 3. Availability Calendar & Slots
   getAvailability: async (monthQuery) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('getAvailability', { monthQuery });
+    }
+
     try {
       const now = new Date();
       let year = now.getFullYear();
@@ -159,6 +199,10 @@ export const api = {
   },
 
   getDateSlots: async (dateStr) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('getDateSlots', { dateStr });
+    }
+
     try {
       const [{ data: bData }, { data: sData }] = await Promise.all([
         supabase
@@ -211,6 +255,10 @@ export const api = {
 
   // 4. Bookings
   createBooking: async (payload) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('createBooking', payload);
+    }
+
     try {
       // Validate slot availability
       const slotsRes = await api.getDateSlots(payload.appointment_date);
@@ -267,6 +315,10 @@ export const api = {
   },
 
   getAllBookings: async () => {
+    if (isLocalPostgres) {
+      return await callLocalApi('getAllBookings');
+    }
+
     try {
       const { data, error } = await supabase
         .from('bookings')
@@ -282,6 +334,10 @@ export const api = {
   },
 
   updateBookingStatus: async (id, status) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('updateBookingStatus', { id, status });
+    }
+
     try {
       const { data, error } = await supabase
         .from('bookings')
@@ -299,6 +355,10 @@ export const api = {
 
   // 5. Press On Nails (PON) Tracking
   getPonOrders: async (query = '') => {
+    if (isLocalPostgres) {
+      return await callLocalApi('getPonOrders', { query });
+    }
+
     try {
       let req = supabase
         .from('pon_orders')
@@ -320,6 +380,10 @@ export const api = {
   },
 
   createPonOrder: async (payload) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('createPonOrder', payload);
+    }
+
     try {
       let order_id = payload.order_id;
       if (!order_id) {
@@ -347,6 +411,10 @@ export const api = {
   },
 
   updatePonOrder: async (id, payload) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('updatePonOrder', { id, ...payload });
+    }
+
     try {
       const { data, error } = await supabase
         .from('pon_orders')
@@ -364,6 +432,10 @@ export const api = {
 
   // 6. Blocked Slots & Studio Holidays
   blockSlot: async (payload) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('blockSlot', payload);
+    }
+
     try {
       const { data, error } = await supabase
         .from('blocked_slots')
@@ -383,6 +455,10 @@ export const api = {
   },
 
   unblockSlot: async (payload) => {
+    if (isLocalPostgres) {
+      return await callLocalApi('unblockSlot', payload);
+    }
+
     try {
       let query = supabase.from('blocked_slots').delete().eq('date', payload.date);
       if (payload.time) {

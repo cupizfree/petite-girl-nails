@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { page } from '$app/stores';
   import { api } from '$lib/api';
+  import { getStudioCalendarUrl } from '$lib/calendar';
 
   let name = $state('');
   let whatsapp = $state('');
@@ -385,6 +386,16 @@
         >
           <span>💬 Kirim Konfirmasi ke WhatsApp Studio</span>
         </a>
+
+        <a 
+          href={getStudioCalendarUrl(bookingSuccess.booking)} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="btn-customer-gcal"
+          title="Simpan janji temu ini ke Google Calendar kamu lengkap dengan alarm pengingat"
+        >
+          <span>📅 Simpan ke Google Calendar Saya</span>
+        </a>
       </div>
 
       <button class="btn-new-booking" onclick={resetForm}>
@@ -765,6 +776,30 @@
   }
   .btn-send-wa:hover {
     background: #4e8365;
+    transform: translateY(-2px);
+  }
+
+  .btn-customer-gcal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #ffffff;
+    border: 1px solid var(--purple-border);
+    color: var(--purple);
+    font-size: 13.5px;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    transition: 0.2s;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+  .btn-customer-gcal:hover {
+    background: var(--purple-soft);
+    border-color: var(--purple);
     transform: translateY(-2px);
   }
 

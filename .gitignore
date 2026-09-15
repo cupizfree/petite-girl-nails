@@ -25,3 +25,9 @@ Thumbs.db
 
 # Temp & Artifacts
 scratch/
+references/
+
+# Keys & Secrets
+*google-key*.json
+google-service-account.json
+

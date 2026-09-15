@@ -2,6 +2,18 @@
   import { onMount } from 'svelte';
   import { api } from '$lib/api';
   import { downloadStyledExcel } from '$lib/exportExcel';
+  import { getStudioCalendarUrl, getPonCalendarUrl } from '$lib/calendar';
+
+  let feedCopied = $state(false);
+  function copyFeedUrl() {
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://petite-girl-nails.vercel.app';
+    const url = `${origin}/api/calendar/feed.ics`;
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+      feedCopied = true;
+      setTimeout(() => feedCopied = false, 3000);
+    }
+  }
 
   let activeTab = $state('agenda'); // 'agenda', 'bookings', 'pon', 'services', 'slots'
 
@@ -611,6 +623,29 @@
   <!-- Tab 0: Agenda Harian -->
   {#if activeTab === 'agenda'}
     <div class="tab-content animate-fade-in">
+      <!-- Google Calendar Sync Banner -->
+      <div class="gcal-sync-banner">
+        <div class="gcal-banner-left">
+          <div class="gcal-icon-wrap">📅</div>
+          <div>
+            <div class="gcal-badge-row">
+              <span class="gcal-badge">OTOMATIS & ADA ALARM</span>
+              <span class="gcal-sub-tag">Studio & PON</span>
+            </div>
+            <h4 class="gcal-title">Sinkronkan Jadwal ke Google Calendar HP Kamu</h4>
+            <p class="gcal-desc">Janji temu studio (notifikasi H-2 jam) & deadline PON mepet (notifikasi H-1) otomatis tersinkron ke kalender HP kamu!</p>
+          </div>
+        </div>
+        <div class="gcal-banner-right">
+          <button type="button" class="btn-copy-feed" onclick={copyFeedUrl}>
+            {feedCopied ? '✓ Link Feed Disalin!' : '📋 Salin Link Kalender (.ics)'}
+          </button>
+          <a href="https://calendar.google.com/calendar/u/0/r/settings/addbyurl" target="_blank" rel="noopener noreferrer" class="btn-open-gcal-settings">
+            Buka Pengaturan GCal ➔
+          </a>
+        </div>
+      </div>
+
       <div class="agenda-toolbar">
         <div class="agenda-date-controls">
           <button class="btn-date-quick" class:active={agendaDate === new Date().toISOString().slice(0, 10)} onclick={() => setAgendaOffset(0)}>Hari Ini</button>
@@ -742,6 +777,15 @@
                     title="Kirim pesan WhatsApp ke klien"
                   >
                     💬 Chat WA
+                  </a>
+                  <a 
+                    href={getStudioCalendarUrl(item.booking)} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="btn-agenda-gcal"
+                    title="Buka & Tambahkan ke Google Calendar dengan Alarm Pengingat 2 Jam & 30 Menit"
+                  >
+                    📅 GCal
                   </a>
                   {#if item.booking.status === 'PENDING'}
                     <button 
@@ -901,6 +945,15 @@
                     </td>
                     <td>
                       <div class="action-buttons">
+                        <a 
+                          href={getStudioCalendarUrl(item)} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          class="btn-act gcal"
+                          title="Buka & Pasang di Google Calendar dengan Alarm Pengingat"
+                        >
+                          📅 GCal
+                        </a>
                         {#if item.status === 'PENDING'}
                           <button 
                             class="btn-act confirm" 
@@ -1032,6 +1085,15 @@
                         >
                           🟢 Sent
                         </button>
+                        <a 
+                          href={getPonCalendarUrl(item)} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          class="btn-pon-gcal"
+                          title="Buka Google Calendar untuk Pasang Alarm Pengingat Deadline Mepet"
+                        >
+                          ⏰ Alarm GCal
+                        </a>
                       </div>
                     </td>
                   </tr>
@@ -1731,6 +1793,20 @@
   .btn-act.confirm { background: var(--green); color: #fff; }
   .btn-act.complete { background: var(--purple); color: #fff; }
   .btn-act.cancel { background: #fcefed; color: #a83232; }
+  .btn-act.gcal {
+    background: #eef3fc;
+    color: #1a73e8;
+    border: 1px solid #c7dcfa;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: 0.15s;
+  }
+  .btn-act.gcal:hover {
+    background: #1a73e8;
+    color: #ffffff;
+  }
 
   /* Quick status in PON */
   .btn-add-pon {
@@ -1747,6 +1823,7 @@
     display: flex;
     gap: 4px;
     flex-wrap: wrap;
+    align-items: center;
   }
   .btn-status-pill {
     border: 1px solid var(--line);
@@ -1761,6 +1838,25 @@
     border-color: var(--purple);
     background: var(--purple);
     color: #fff;
+  }
+  .btn-pon-gcal {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #fef7e0;
+    color: #b06000;
+    border: 1px solid #f9e295;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .btn-pon-gcal:hover {
+    background: #b06000;
+    color: #ffffff;
   }
 
   /* Slot Block Form */
@@ -2375,6 +2471,110 @@
     transform: translateY(-1px);
   }
 
+  /* Google Calendar Sync Banner */
+  .gcal-sync-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    background: linear-gradient(135deg, #eef4fe 0%, #f7f9ff 100%);
+    border: 1.5px solid #d2e3fc;
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(26, 115, 232, 0.08);
+    flex-wrap: wrap;
+  }
+  .gcal-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .gcal-icon-wrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid #c7dcfa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 2px 6px rgba(26, 115, 232, 0.12);
+    flex-shrink: 0;
+  }
+  .gcal-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .gcal-badge {
+    background: #1a73e8;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    letter-spacing: 0.05em;
+  }
+  .gcal-sub-tag {
+    font-size: 11px;
+    font-weight: 700;
+    color: #185abc;
+  }
+  .gcal-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #174ea6;
+    margin: 0 0 2px;
+  }
+  .gcal-desc {
+    font-size: 12.5px;
+    color: #4a5568;
+    margin: 0;
+    max-width: 540px;
+    line-height: 1.4;
+  }
+  .gcal-banner-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn-copy-feed {
+    background: #1a73e8;
+    color: #ffffff;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 750;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(26, 115, 232, 0.25);
+    transition: all 0.15s ease;
+  }
+  .btn-copy-feed:hover {
+    background: #1557b0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.35);
+  }
+  .btn-open-gcal-settings {
+    background: #ffffff;
+    color: #1a73e8;
+    border: 1px solid #c7dcfa;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .btn-open-gcal-settings:hover {
+    background: #f1f6fd;
+    border-color: #1a73e8;
+  }
+
   /* Agenda Harian Toolbar & Timeline */
   .agenda-toolbar {
     display: flex;
@@ -2634,6 +2834,28 @@
     background: #1ebc59;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(37, 211, 102, 0.35);
+  }
+  .btn-agenda-gcal {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    color: #1a73e8;
+    border: 1px solid #c7dcfa;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 750;
+    box-shadow: 0 2px 6px rgba(26, 115, 232, 0.12);
+    transition: all 0.16s ease;
+  }
+  .btn-agenda-gcal:hover {
+    background: #1a73e8;
+    color: #ffffff;
+    border-color: #1a73e8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.25);
   }
   .btn-agenda-action {
     display: inline-flex;

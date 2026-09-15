@@ -1,5 +1,3 @@
-import ExcelJS from 'exceljs';
-
 /**
  * Generates and downloads a beautifully styled .xlsx Excel spreadsheet for Petite Girl Nails bookings.
  * @param {Array} bookings 
@@ -11,6 +9,8 @@ export async function downloadStyledExcel(bookings, filterDate = '') {
     return;
   }
 
+  const ExcelJSModule = await import('exceljs');
+  const ExcelJS = ExcelJSModule.default || ExcelJSModule;
   const workbook = new ExcelJS.Workbook();
   workbook.creator = 'Petite Girl Nails Admin Portal';
   workbook.lastModifiedBy = 'Admin';
