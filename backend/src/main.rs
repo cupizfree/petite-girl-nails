@@ -72,10 +72,14 @@ async fn main() {
         .layer(TraceLayer::new_for_http())
         .with_state(state);
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let port: u16 = std::env::var("PORT")
+        .ok()
+        .and_then(|p| p.parse().ok())
+        .unwrap_or(3000);
+    let addr = SocketAddr::from(([0, 0, 0, 0], port));
     println!("💅 Petite Girl Nails Backend running on http://{}", addr);
 
-    let listener = tokio::net::TcpListener::bind(addr).await.expect("Failed to bind port 3000");
+    let listener = tokio::net::TcpListener::bind(addr).await.expect("Failed to bind port");
     axum::serve(listener, app).await.expect("Axum server failed to start");
 }
 

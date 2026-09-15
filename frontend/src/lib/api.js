@@ -1,4 +1,8 @@
-const BASE_URL = 'http://localhost:3000';
+import { env } from '$env/dynamic/public';
+
+const BASE_URL = (typeof env !== 'undefined' && env.PUBLIC_API_URL)
+  ? env.PUBLIC_API_URL.replace(/\/$/, '')
+  : 'http://localhost:3000';
 
 export async function fetchApi(endpoint, options = {}) {
   try {
