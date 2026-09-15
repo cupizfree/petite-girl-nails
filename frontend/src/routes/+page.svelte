@@ -301,27 +301,48 @@
   <div class="lightbox-overlay" onclick={closeLightbox} role="dialog" aria-modal="true" tabindex="-1">
     <div class="lightbox-modal animate-fade-in" onclick={(e) => e.stopPropagation()} role="document">
       <button type="button" class="lightbox-close" onclick={closeLightbox} aria-label="Tutup">✕</button>
+      
       <div class="lightbox-img-box">
         <img src={selectedImage.src} alt={selectedImage.title} class="lightbox-img" />
+        <span class="lightbox-zoom-hint">✨ Foto Karya Asli Studio</span>
       </div>
+
       <div class="lightbox-info">
-        <div class="lightbox-meta">
-          <span class="showcase-badge-inline">{selectedImage.badge}</span>
-          <span class="showcase-tag">{selectedImage.categoryLabel}</span>
+        <div class="lightbox-info-top">
+          <div class="lightbox-meta">
+            <span class="showcase-badge-inline">{selectedImage.badge}</span>
+            <span class="showcase-tag">{selectedImage.categoryLabel}</span>
+          </div>
+          <h3 class="lightbox-title">{selectedImage.title}</h3>
+          <p class="lightbox-desc">{selectedImage.desc}</p>
+          
+          <div class="lightbox-specs">
+            <div class="spec-row">
+              <span class="spec-icon">✨</span>
+              <span>Bisa custom warna, panjang kuku & motif sesuai selera</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-icon">💅</span>
+              <span>Tersedia untuk pengerjaan kuku asli maupun set Press On Nails</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-icon">📍</span>
+              <span>Studio Sewon, Bantul (tersedia opsi GoSend / Kirim Paket)</span>
+            </div>
+          </div>
         </div>
-        <h3 class="lightbox-title">{selectedImage.title}</h3>
-        <p class="lightbox-desc">{selectedImage.desc}</p>
+
         <div class="lightbox-btns">
-          <a href="/book?inspo={encodeURIComponent(selectedImage.title)}" class="btn-primary" onclick={closeLightbox}>
+          <a href="/book?inspo={encodeURIComponent(selectedImage.title)}" class="btn-primary btn-modal-main" onclick={closeLightbox}>
             <span>💅 Booking dengan Desain Ini</span>
           </a>
           <a 
             href="https://wa.me/6285179968311?text={encodeURIComponent(`Halo Petite Girl Nails! 💕 Mau request motif kuku '${selectedImage.title}' seperti di galeri web ini yaa ✨`)}" 
             target="_blank" 
             rel="noopener noreferrer" 
-            class="btn-secondary"
+            class="btn-wa-modal"
           >
-            <span>💬 Chat WhatsApp</span>
+            <span>💬 Konsultasi via WhatsApp</span>
           </a>
         </div>
       </div>
@@ -684,7 +705,7 @@
   .showcase-img-wrap {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 3.2;
+    aspect-ratio: 3 / 3.8;
     overflow: hidden;
     cursor: pointer;
     background: var(--purple-soft);
@@ -847,8 +868,8 @@
   .lightbox-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(65, 56, 73, 0.7);
-    backdrop-filter: blur(6px);
+    background: rgba(35, 28, 42, 0.78);
+    backdrop-filter: blur(8px);
     z-index: 9999;
     display: flex;
     align-items: center;
@@ -857,55 +878,95 @@
   }
   .lightbox-modal {
     background: var(--card);
-    border-radius: var(--radius-lg);
-    max-width: 640px;
-    width: 100%;
+    border-radius: 24px;
+    max-width: 1040px;
+    width: min(1040px, 94vw);
+    max-height: 88vh;
+    display: flex;
+    flex-direction: row;
     overflow: hidden;
     position: relative;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--purple-border);
+    box-shadow: 0 30px 90px rgba(25, 18, 35, 0.45);
+    border: 1.5px solid var(--purple-border);
   }
   .lightbox-close {
     position: absolute;
-    top: 14px;
-    right: 14px;
-    width: 34px;
-    height: 34px;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid var(--line);
     font-size: 16px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2;
-    transition: 0.15s;
+    z-index: 10;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   }
   .lightbox-close:hover {
     background: #fff;
     transform: scale(1.1);
+    color: var(--purple);
   }
   .lightbox-img-box {
-    width: 100%;
-    max-height: 380px;
+    flex: 1.2;
+    background: radial-gradient(circle at center, #2e2637 0%, #17131c 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+    min-height: 520px;
+    max-height: 88vh;
+    position: relative;
     overflow: hidden;
-    background: #000;
   }
   .lightbox-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* PENTING: Foto kuku utuh 100% tanpa terpotong! */
+    border-radius: 14px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
     display: block;
   }
+  .lightbox-zoom-hint {
+    position: absolute;
+    bottom: 14px;
+    left: 16px;
+    background: rgba(25, 20, 30, 0.75);
+    backdrop-filter: blur(4px);
+    color: #f7d4dc;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    pointer-events: none;
+  }
   .lightbox-info {
-    padding: 24px;
+    flex: 1;
+    min-width: 320px;
+    max-width: 440px;
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--card-warm);
+    overflow-y: auto;
+  }
+  .lightbox-info-top {
+    display: flex;
+    flex-direction: column;
   }
   .lightbox-meta {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
+    gap: 8px;
+    margin-bottom: 10px;
   }
   .showcase-badge-inline {
     background: var(--yellow-soft);
@@ -917,21 +978,93 @@
     border-radius: var(--radius-full);
   }
   .lightbox-title {
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 800;
     color: var(--purple);
     margin-bottom: 8px;
+    line-height: 1.3;
   }
   .lightbox-desc {
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--text-muted);
     line-height: 1.6;
-    margin-bottom: 22px;
+    margin-bottom: 18px;
+  }
+  .lightbox-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .spec-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12.5px;
+    color: var(--text);
+    line-height: 1.45;
+  }
+  .spec-icon {
+    font-size: 14px;
+    flex-shrink: 0;
   }
   .lightbox-btns {
     display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn-modal-main {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 13px;
+    font-size: 14px;
+    font-weight: 750;
+  }
+  .btn-wa-modal {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--green-soft);
+    color: var(--green);
+    border: 1px solid var(--green-border);
+    padding: 12px;
+    border-radius: var(--radius-full);
+    font-size: 13.5px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.15s;
+    box-sizing: border-box;
+  }
+  .btn-wa-modal:hover {
+    background: #dff0e6;
+  }
+
+  @media (max-width: 820px) {
+    .lightbox-modal {
+      flex-direction: column;
+      max-height: 92vh;
+      width: min(480px, 94vw);
+      overflow-y: auto;
+    }
+    .lightbox-img-box {
+      min-height: unset;
+      height: 50vh;
+      padding: 16px;
+    }
+    .lightbox-img {
+      max-height: 46vh;
+    }
+    .lightbox-info {
+      padding: 24px 20px;
+      max-width: 100%;
+    }
   }
 
   /* Rules Card */
