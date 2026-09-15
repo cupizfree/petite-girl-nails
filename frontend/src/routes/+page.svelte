@@ -73,10 +73,6 @@
   }
 </script>
 
-<svelte:head>
-  <title>Petite Girl Nails — Aesthetic Nail Art & Booking Studio Bantul Yogyakarta</title>
-  <meta name="description" content="Petite Girl Nails - Studio nail art & press on nails aesthetic di Sewon, Bantul, Yogyakarta. Cek jadwal ketersediaan dan booking janji temu kuku cantikmu di sini." />
-</svelte:head>
 
 <!-- Hero Section -->
 <section class="hero-section">
